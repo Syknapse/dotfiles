@@ -5,8 +5,10 @@
 - clean: ['~']
 
 - link:
-#    ~/.vim: vim
-    ~/.zshrc: zshrc
+#   This is equivalent to ~/.zshrc: zshrc
+#   It will create the dot file in the home directory from the non dot version saved in our repo
+    ~/.zshrc:
+    ~/.gitconfig:
 
 - create:
     - ~/Work
