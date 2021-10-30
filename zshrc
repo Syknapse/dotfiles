@@ -15,6 +15,8 @@ PROMPT='
 RPROMPT='%*'
 
 # Add locations to $PATH variable
+# Add Visual Studio Code (code)
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 # Functions
 function mkcd() {
