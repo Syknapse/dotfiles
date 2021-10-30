@@ -10,5 +10,6 @@ brew install bat
 # Casks
 brew tap homebrew/cask
 
-brew install google-chrome
-brew install visual-studio-code
+brew install --no-quarantine google-chrome
+brew install --no-quarantine visual-studio-code
+brew install --no-quarantine alfred
