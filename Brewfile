@@ -23,3 +23,4 @@ cask "gitkraken"
 cask "spotify"
 # Open-source code editor
 cask "visual-studio-code"
+mas "Snappy", id: 512617038
