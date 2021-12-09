@@ -17,5 +17,7 @@ cask "alfred"
 cask "dropbox"
 # Git client focusing on productivity
 cask "gitkraken"
+# Music streaming service
+cask "spotify"
 # Open-source code editor
 cask "visual-studio-code"
