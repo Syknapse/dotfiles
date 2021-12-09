@@ -9,6 +9,8 @@ brew "exa"
 brew "git"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
+# Manage multiple Node.js versions
+brew "nvm"
 # Application launcher and productivity software
 cask "alfred"
 # Client for the Dropbox cloud storage service
