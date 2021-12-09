@@ -1,3 +1,5 @@
 [user]
 	name = Syknapse
 	email = 29199184+Syknapse@users.noreply.github.com
+[init]
+	defaultBranch = main
