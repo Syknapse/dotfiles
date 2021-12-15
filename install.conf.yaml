@@ -2,19 +2,21 @@
     link:
       relink: true
 
-- clean: ['~']
+- clean: ["~"]
 
 - link:
-#   This is equivalent to ~/.zshrc: zshrc
-#   It will create the dot file in the home directory from the non dot version saved in our repo
+    #   This is equivalent to ~/.zshrc: zshrc
+    #   It will create the dot file in the home directory from the non dot version saved in our repo
     ~/.zshrc:
     ~/.gitconfig:
+    ~/.config/bat:
+      create: true
+      path: config/bat
 
 - create:
     - ~/Work
 
 - shell:
-    - 
-     command: ./setup_homebrew.zsh
-     stdout: true
-     stderr: true
+    - command: ./setup_homebrew.zsh
+      stdout: true
+      stderr: true
