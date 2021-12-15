@@ -1,7 +1,5 @@
 # Variables
-# Syntax highlighting for man pages using bat
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-# Disable iOS gatekeeper when installing Brew casks
+# Disable MacOS gatekeeper when installing Brew casks
 export HOMEBREW_CASK_OPTS="--no-quarantine"
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
@@ -12,6 +10,7 @@ export NVM_DIR="$HOME/.nvm"
 # Aliases
 alias lsf='ls -lAFh'
 alias exa='exa -laFh --git'
+alias man=batman
 
 # Prompts
 PROMPT='
