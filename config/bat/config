@@ -14,7 +14,8 @@
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
 #--map-syntax "*.ino:C++"
 #--map-syntax ".ignore:Git Ignore"
-# Define language to use for our non-dot versions of our files
+
+# Define language to use for our non-dot versions of our files (gives us syntax highlighting)
 --map-syntax "zshrc:Bourne Again Shell (bash)"
 --map-syntax "zshenv:Bourne Again Shell (bash)"
 --map-syntax "brewfile:Bourne Again Shell (bash)"

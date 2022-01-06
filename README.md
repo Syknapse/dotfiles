@@ -26,7 +26,7 @@ To symlink a file in our dotfiles to the home directory we just need to add it t
 
 The following command uses Brew to create/modify the Brewfile with a full list of apps and packages installed on the machine, with a description.  
 These will be installed when we install the dotfiles project.  
-`brew bundle dump --force --describe`
+`brew bundle dump --force --describe` (aliased to `brewbd`)
 
 ## Keeping everything synced
 

@@ -22,6 +22,8 @@ alias exa='exa -laFh --git'
 alias man=batman
 # Restsrt the shell implementing changes to zsh config files
 alias restart='source ~/.zshrc && source ~/.zshenv '
+# Brew bundle dump
+alias brewbd='brew bundle dump --force --describe'
 
 # Prompts
 # -------------------------
