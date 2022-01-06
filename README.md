@@ -4,9 +4,10 @@ macOS dotfiles repo
 
 ## Installation
 
-Clone the repo to your home directory. Ex: `users/syknapse`
+Clone the repo to your home directory. Ex: `users/syknapse`  
+`git clone <repo_address> ~/.dotfiles`
 
-With the terminal in navigate to the dotfiles directory and then execute the install file
+With the terminal navigate to the dotfiles directory and then execute the install file
 
 ```bash
 $ cd .dotfiles
