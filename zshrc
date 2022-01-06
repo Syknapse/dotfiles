@@ -24,6 +24,8 @@ alias man=batman
 alias restart='source ~/.zshrc && source ~/.zshenv '
 # Brew bundle dump
 alias brewbd='brew bundle dump --force --describe'
+# A more readable way to print PATH variable
+alias trail='<<<${(F)path}'
 
 # Prompts
 # -------------------------
