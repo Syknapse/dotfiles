@@ -1,3 +1,4 @@
+echo '.zshrc loaded'
 # Variables
 # Disable MacOS gatekeeper when installing Brew casks
 export HOMEBREW_CASK_OPTS="--no-quarantine"

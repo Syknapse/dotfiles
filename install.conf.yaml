@@ -8,6 +8,7 @@
     #   This is equivalent to ~/.zshrc: zshrc
     #   It will create the dot file in the home directory from the non dot version saved in our repo
     ~/.zshrc:
+    ~/.zshenv:
     ~/.gitconfig:
     ~/.config/bat:
       create: true
