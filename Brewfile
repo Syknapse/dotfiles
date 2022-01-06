@@ -10,8 +10,12 @@ brew "exa"
 brew "git"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
+# Pager program similar to more
+brew "less"
 # Mac App Store command-line interface
 brew "mas"
+# Free (GNU) replacement for the Pico text editor
+brew "nano"
 # Manage multiple Node.js versions
 brew "nvm"
 # Bash scripts that integrate bat with various command-line tools
