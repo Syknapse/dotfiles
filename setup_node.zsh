@@ -12,6 +12,7 @@ else
 fi
 
 # Install global NPM packages
-# npm i -g <any npm package you need globally>
+npm i -g trash-cli
+
 echo "Global NPM packages installed:"
 npm list --global --depth=0
