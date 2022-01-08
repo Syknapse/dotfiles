@@ -32,11 +32,22 @@ alias trail='<<<${(F)path}'
 # Prompts
 # -------------------------
 
-PROMPT='
-%n@%m %1~ %L %#
-'
+# Prompt variables: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html
+# Prompt customisation: https://www.makeuseof.com/customize-zsh-prompt-macos-terminal/
+# Adding git branch: https://gist.github.com/reinvanoyen/05bcfe95ca9cb5041a4eafd29309ff29
+# Legend:
+# %F{<number 0-256>}<part to colorise>%f : add color
+# %n : $USERNAME
+# %m : short host name
+# %~ : current working directory
+# %L : current shell level $SHLVL
+# %* : current time with seconds
+# %# : shows # for sudo user and % for normal user
 
-RPROMPT='%*'
+setopt PROMPT_SUBST
+PROMPT='
+%F{33}%n@%m%f %F{201}%~%f %F{113}$(parse_git_branch)%f %F{222}%*%f %L %#
+'
 
 # Add locations to $PATH variable
 # -------------------------
@@ -49,6 +60,10 @@ export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/b
 
 function mkcd() {
   mkdir -p "$@" && cd "$_" 
+}
+
+function parse_git_branch() {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
 }
 
 # ZSH Plugins
