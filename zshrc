@@ -1,4 +1,5 @@
 echo '.zshrc loaded'
+
 # Variables
 # -------------------------
 
@@ -7,8 +8,8 @@ export HOMEBREW_CASK_OPTS="--no-quarantine"
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-  # Make bat default instead of cat
-  export NULLCMD=bat
+# Make bat default instead of cat
+export NULLCMD=bat
 
 # ZSH Options
 # -------------------------
@@ -49,11 +50,17 @@ PROMPT='
 %F{33}%n@%m%f %F{201}%~%f %F{113}$(parse_git_branch)%f %F{222}%*%f %L %#
 '
 
-# Add locations to $PATH variable
+# Add locations to $path array variable
 # -------------------------
+# When you need to add to $PATH they go here in the path array
 
-# Add Visual Studio Code (code)
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+# Prevent duplicates in the path array
+typeset -U path
+
+path=(
+  $path
+  "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+)
 
 # Functions
 # -------------------------
