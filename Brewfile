@@ -24,10 +24,14 @@ brew "zsh"
 brew "eth-p/software/bat-extras"
 # Application launcher and productivity software
 cask "alfred"
+# Desktop password and login vault
+cask "bitwarden"
 # Client for the Dropbox cloud storage service
 cask "dropbox"
 # Git client focusing on productivity
 cask "gitkraken"
+# Web browser
+cask "google-chrome"
 # Music streaming service
 cask "spotify"
 # Open-source code editor
