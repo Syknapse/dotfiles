@@ -15,7 +15,7 @@
       path: config/bat
 
 - create:
-    - ~/Work
+    - ~/projects
 
 - shell:
     - command: ./setup_homebrew.zsh
