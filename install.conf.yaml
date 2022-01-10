@@ -16,6 +16,7 @@
 
 - create:
     - ~/projects
+    - ~/work
 
 - shell:
     - command: ./setup_homebrew.zsh
