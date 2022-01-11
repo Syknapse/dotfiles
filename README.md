@@ -32,6 +32,11 @@ These will be installed when we install the dotfiles project.
 
 When you make any changes to the dotfiles remember to commit and push to the repo. This way on any other machine you have installed dotfiles, you only need to pull the changes from the remote repo and run `./install` to sync the new changes.
 
+## to do
+
+- add explanation of work gitconfig (has to be init to be tested)
+- add explanation of how to symlink
+
 ---
 
 Based on this great course [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz)

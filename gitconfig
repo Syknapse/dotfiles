@@ -1,8 +1,6 @@
 [user]
 	name = Syknapse
 	email = 29199184+Syknapse@users.noreply.github.com
-[includeIf "gitdir:~/work/"]
-    path = ~/work/.gitconfig
 [init]
 	defaultBranch = main
 [alias]
@@ -11,4 +9,8 @@
   # Show last commit
   last = log -1 HEAD
   # Show current user
-  whoami = !git config --global user.name && git config --global user.email
+  whoami = !git config user.name && git config user.email
+# If there is a work directory take gitconfig from there.
+# This allows us to have a different user in work folders
+[includeIf "gitdir:~/work/"]
+    path = ~/work/.gitconfig
