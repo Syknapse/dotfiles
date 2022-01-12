@@ -22,8 +22,6 @@ brew "nvm"
 brew "zsh"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
-# Application launcher and productivity software
-cask "alfred"
 # Desktop password and login vault
 cask "bitwarden"
 # Git client focusing on productivity
@@ -34,4 +32,3 @@ cask "google-chrome"
 cask "spotify"
 # Open-source code editor
 cask "visual-studio-code"
-mas "Snappy", id: 512617038
