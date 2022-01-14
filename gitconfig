@@ -14,3 +14,5 @@
 # This allows us to have a different user in work folders
 [includeIf "gitdir:~/work/"]
     path = ~/work/.gitconfig
+[core]
+	editor = nano
