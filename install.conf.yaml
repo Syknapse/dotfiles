@@ -10,6 +10,7 @@
     ~/.zshrc:
     ~/.zshenv:
     ~/.gitconfig:
+    ~/.gitignore:
     ~/.config/bat:
       create: true
       path: config/bat

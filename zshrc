@@ -30,6 +30,9 @@ alias brewbd='brew bundle dump --force --describe'
 # A more readable way to print PATH variable
 alias trail='<<<${(F)path}'
 
+# Exclusive for work environment
+alias dev='echo "yarn workspace lola-app dev" && yarn workspace lola-app dev'
+
 # Prompts
 # -------------------------
 
@@ -65,6 +68,8 @@ path=(
 # Functions
 # -------------------------
 
+# Create a new directory and cd to it
+# USAGE: mkdc 'new_project'
 function mkcd() {
   mkdir -p "$@" && cd "$_" 
 }
