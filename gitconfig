@@ -16,3 +16,4 @@
     path = ~/work/.gitconfig
 [core]
 	editor = nano
+	excludesfile = /Users/sykh/.gitignore
