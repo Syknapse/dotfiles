@@ -6,8 +6,9 @@ echo '.zshrc loaded'
 # Disable MacOS gatekeeper when installing Brew casks
 export HOMEBREW_CASK_OPTS="--no-quarantine"
 export NVM_DIR="$HOME/.nvm"
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Make bat default instead of cat
 export NULLCMD=bat
 
@@ -20,7 +21,7 @@ export NULLCMD=bat
 # More detailed version of ls
 alias lsf='ls -lAFh'
 # Much more detailed and colorful version of ls
-alias exa='exa -laFh --git'
+alias eza='eza -laFh --git'
 # A better version of the manual comand
 alias man=batman
 # Restsrt the shell implementing changes to zsh config files
@@ -29,9 +30,6 @@ alias restart='source ~/.zshrc && source ~/.zshenv '
 alias brewbd='brew bundle dump --force --describe'
 # A more readable way to print PATH variable
 alias trail='<<<${(F)path}'
-
-# Exclusive for work environment
-alias dev='echo "yarn workspace lola-app dev" && yarn workspace lola-app dev'
 
 # Prompts
 # -------------------------
@@ -80,4 +78,7 @@ function parse_git_branch() {
 
 # ZSH Plugins
 # -------------------------
+
+
+
 
