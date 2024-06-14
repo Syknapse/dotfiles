@@ -1,4 +1,5 @@
 echo '.zshrc loaded'
+echo 'Available aliases: lsf, eza, man, restart, brewbd, trail'
 
 # Variables
 # -------------------------
@@ -21,7 +22,7 @@ export NULLCMD=bat
 # More detailed version of ls
 alias lsf='ls -lAFh'
 # Much more detailed and colorful version of ls
-alias eza='eza -laFh --git'
+alias eza='eza -lahF --git'
 # A better version of the manual comand
 alias man=batman
 # Restsrt the shell implementing changes to zsh config files

@@ -4,7 +4,9 @@ macOS dotfiles repo
 
 ## Installation
 
-Clone the repo to your home directory. Ex: `users/syknapse`  
+WARNING: This is currently not working properly. It creates the repo and symlinks correctly, and creates the projects and work directories, but all subsequent steps fail. Brew is not executing and not installing packages.
+
+Clone the repo to .dotfiles directory in your home directory. Ex: `users/syknapse`  
 `git clone <repo_address> ~/.dotfiles`
 
 With the terminal navigate to the dotfiles directory and then execute the install file
