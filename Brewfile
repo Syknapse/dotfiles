@@ -1,6 +1,5 @@
 tap "eth-p/software"
 tap "homebrew/bundle"
-tap "homebrew/core"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Modern maintained replacement for 'ls'
