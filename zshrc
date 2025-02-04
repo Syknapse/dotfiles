@@ -1,6 +1,12 @@
 echo '.zshrc loaded'
 echo 'Available aliases: lsf, eza, man, restart, brewbd, trail, mkcd, pn'
-echo 'Aliases: lsf (ls -lAFh), eza (eza -lahF --git), man (batman), restart (source ~/.zshrc && source ~/.zshenv ), brewbd (brew bundle dump --force --describe), trail (<<<${(F)path}), mkcd (make a new directory and cd into it mkdc 'new_project'), pn (pnpm)'
+echo -e "┌─────────────────┬────────────────────────┬───────────────┬────────────┬────────────────────────┐"
+echo -e "│ lsf -> ls -lAFh │ eza -> eza -lahF --git │ man -> batman │ pn -> pnpm │                        │"
+echo -e "├─────────────────┴────────────────────────┴─────┬─────────┴────────────┴────────────────────────┤"
+echo -e "│ restart -> source ~/.zshrc && source ~/.zshenv │ brewbd -> brew bundle dump --force --describe │"
+echo -e "├──────────────────────────────┬─────────────────┴───────────────────────────────────────────────┤"
+echo -e "│ trail -> print PATH variable │ mkcd -> make a new directory and cd into it mkdc 'new_project'  │"
+echo -e "└──────────────────────────────┴─────────────────────────────────────────────────────────────────┘"
 
 # Variables
 # -------------------------
