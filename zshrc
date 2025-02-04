@@ -1,5 +1,6 @@
 echo '.zshrc loaded'
-echo 'Available aliases: lsf, eza, man, restart, brewbd, trail'
+echo 'Available aliases: lsf, eza, man, restart, brewbd, trail, mkcd, pn'
+echo 'Aliases: lsf (ls -lAFh), eza (eza -lahF --git), man (batman), restart (source ~/.zshrc && source ~/.zshenv ), brewbd (brew bundle dump --force --describe), trail (<<<${(F)path}), mkcd (make a new directory and cd into it mkdc 'new_project'), pn (pnpm)'
 
 # Variables
 # -------------------------
@@ -32,6 +33,8 @@ alias restart='source ~/.zshrc && source ~/.zshenv '
 alias brewbd='brew bundle dump --force --describe'
 # A more readable way to print PATH variable
 alias trail='<<<${(F)path}'
+# A quicker way to type pnpm
+alias pn='pnpm'
 
 # Prompts
 # -------------------------
