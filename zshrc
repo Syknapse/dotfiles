@@ -3,7 +3,7 @@ echo 'Available aliases: lsf, eza, man, restart, brewbd, trail, mkcd, pn'
 echo -e "┌─────────────────┬────────────────────────┬───────────────┬────────────┬────────────────────────┐"
 echo -e "│ lsf -> ls -lAFh │ eza -> eza -lahF --git │ man -> batman │ pn -> pnpm │                        │"
 echo -e "├─────────────────┴────────────────────────┴─────┬─────────┴────────────┴────────────────────────┤"
-echo -e "│ restart -> source ~/.zshrc && source ~/.zshenv │ brewbd -> brew bundle dump --force --describe │"
+echo -e "│ restart -> source ~/.zshrc && source ~/.zshenv │ brewbd -> brew bundle dump (no vscode exts)   │"
 echo -e "├──────────────────────────────┬─────────────────┴───────────────────────────────────────────────┤"
 echo -e "│ trail -> print PATH variable │ mkcd -> make a new directory and cd into it mkdc 'new_project'  │"
 echo -e "└──────────────────────────────┴─────────────────────────────────────────────────────────────────┘"
@@ -13,6 +13,8 @@ echo -e "└──────────────────────�
 
 # Disable MacOS gatekeeper when installing Brew casks
 export HOMEBREW_CASK_OPTS="--no-quarantine"
+# Exclude VSCode extensions from brew bundle dump (synced via VSCode Settings Sync instead)
+export HOMEBREW_BUNDLE_DUMP_NO_VSCODE=1
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
@@ -20,6 +22,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # Make bat default instead of cat
 export NULLCMD=bat
+
+# Load secrets (API keys etc.) from ~/.secrets — never commit that file
+[ -f ~/.secrets ] && source ~/.secrets
 
 # ZSH Options
 # -------------------------
@@ -35,8 +40,8 @@ alias eza='eza -lahF --git'
 alias man=batman
 # Restsrt the shell implementing changes to zsh config files
 alias restart='source ~/.zshrc && source ~/.zshenv '
-# Brew bundle dump
-alias brewbd='brew bundle dump --force --describe'
+# Brew bundle dump (--no-vscode: extensions are synced via VSCode Settings Sync)
+alias brewbd='brew bundle dump --force --describe --no-vscode'
 # A more readable way to print PATH variable
 alias trail='<<<${(F)path}'
 # A quicker way to type pnpm
@@ -93,3 +98,4 @@ function parse_git_branch() {
 
 
 
+export PATH="$HOME/.local/bin:$PATH"

@@ -1,0 +1,10 @@
+# Work git identity — copy this to ~/work/.gitconfig and fill in your details.
+# It will be loaded automatically for any repo inside ~/work/ (see ~/.gitconfig).
+#
+# HOW TO USE:
+#   cp config/work-gitconfig.example ~/work/.gitconfig
+#   # then edit ~/work/.gitconfig with your work details
+
+[user]
+    name = Your Work Name
+    email = yourname@company.com

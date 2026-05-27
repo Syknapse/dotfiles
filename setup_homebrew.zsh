@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+set -e
 
 echo "\n<<< Starting Homebrew setup >>>\n"
 
@@ -7,6 +8,9 @@ if exists brew; then
 else
   echo "Brew doesn't exist, installing ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  # Put brew in PATH for the rest of this script — the installer writes to ~/.zprofile
+  # but that doesn't take effect in the current subprocess.
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 

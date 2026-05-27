@@ -1,48 +1,118 @@
 # .dotfiles
 
-macOS dotfiles repo
-
-## Installation
-
-WARNING: This is currently not working properly. It creates the repo and symlinks correctly, and creates the projects and work directories, but all subsequent steps fail. Brew is not executing and not installing packages.  
-**This can be fixed by installing brew manually before installing this program**. Then it all works correctly
-
-Clone the repo to .dotfiles directory in your home directory. Ex: `users/syknapse`
-
-```bash
-git clone <repo_address> ~/.dotfiles
-```
-
-With the terminal navigate to the dotfiles directory and then execute the install file
-
-```bash
-$ cd .dotfiles
-# users/syknapse/.dotfiles
-
-$ ./install
-# starts installation process of all the dotfiles project
-```
-
-## Symlinks
-
-To symlink a file in our dotfiles to the home directory we just need to add it to the `install.conf.yaml` file.  
-`~/.zshrc: zshrc` will create a .zshrc file in the home directory which is symbolically linked to the zshrc file in our .dotfiles directory.
-
-## Create or modify the Brewfile
-
-The following command uses Brew to create/modify the Brewfile with a full list of apps and packages installed on the machine, with a description.  
-These will be installed when we install the dotfiles project.  
-`brew bundle dump --force --describe` (aliased to `brewbd`)
-
-## Keeping everything synced
-
-When you make any changes to the dotfiles remember to commit and push to the repo. This way on any other machine you have installed dotfiles, you only need to pull the changes from the remote repo and run `./install` to sync the new changes.
-
-## to do
-
-- add explanation of work gitconfig (has to be init to be tested)
-- add explanation of how to symlink
+macOS dotfiles repo — managed with [Dotbot](https://github.com/anishathalye/dotbot).
 
 ---
 
-Based on this great course [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz)
+## Quick Start
+
+```bash
+git clone <repo_address> ~/.dotfiles
+cd ~/.dotfiles
+./install
+```
+
+> **Note:** On a brand new Mac, the Homebrew installer may prompt you to install Xcode Command Line Tools — that's expected and required. The install script handles everything else automatically.
+
+`./install` will:
+1. Create symlinks in `~` for all config files
+2. Create `~/projects` and `~/work` directories
+3. Install all Homebrew packages + casks from the Brewfile
+4. Set Homebrew ZSH as the default shell
+5. Install Node LTS via NVM
+6. Apply macOS system preferences
+7. Generate an SSH key (if none exists)
+
+---
+
+## After Cloning on a New Machine
+
+1. Copy your secrets file: `cp secrets.example secrets` — then fill in your API keys
+2. Create your work git identity: `cp config/work-gitconfig.example ~/work/.gitconfig` — then fill in your work name/email
+3. Run `./install`
+
+---
+
+## Symlinks
+
+Files are symlinked from `~/.dotfiles/` into your home directory via `install.conf.yaml`.  
+To add a new dotfile: add an entry under `link:` in `install.conf.yaml`:
+```yaml
+~/.filename: filename
+```
+Re-run `./install` to apply.
+
+---
+
+## Secrets & API Keys
+
+Private environment variables (API keys, tokens) belong in `~/.secrets` — **never in any tracked file**.
+
+```bash
+cp secrets.example secrets   # then edit with your values
+```
+
+`zshrc` automatically sources `~/.secrets` on shell start. The `secrets` file is gitignored.
+
+---
+
+## Brewfile
+
+The Brewfile tracks Homebrew packages and apps (but **not** VSCode extensions — those sync automatically via VSCode Settings Sync).
+
+To regenerate it from your current machine state:
+
+```bash
+brewbd   # brew bundle dump --force --describe --no-vscode
+```
+
+The `HOMEBREW_BUNDLE_DUMP_NO_VSCODE=1` env var (set in `zshrc`) ensures VSCode extensions are excluded even if `brew bundle dump` is run directly without the alias.
+
+Then commit and push the updated Brewfile.
+
+---
+
+## macOS Settings
+
+`setup_macos.zsh` applies your system preferences (Dock, Finder, keyboard, trackpad, screenshots, etc.).
+
+```bash
+./setup_macos.zsh --dry-run   # preview what would change
+./setup_macos.zsh             # apply all settings
+```
+
+---
+
+## Testing & Verification
+
+```bash
+./test.sh     # syntax-check all scripts (zero risk)
+./verify.sh   # check current machine state against expected setup
+```
+
+`verify.sh` is safe to run at any time — it makes no changes, just reports what's correct or missing.
+
+---
+
+## Keeping Everything Synced
+
+After editing any dotfile: commit and push. On other machines:
+```bash
+git pull
+./install
+```
+
+---
+
+## Work Git Identity
+
+`~/.gitconfig` conditionally loads `~/work/.gitconfig` for any repo inside `~/work/`. That file must be created manually (it's outside this repo since it may contain a different work identity):
+
+```bash
+cp config/work-gitconfig.example ~/work/.gitconfig
+# then edit ~/work/.gitconfig with your work name and email
+```
+
+---
+
+*Based on [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz)*

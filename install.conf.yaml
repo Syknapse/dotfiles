@@ -9,8 +9,14 @@
     #   It will create the dot file in the home directory from the non dot version saved in our repo
     ~/.zshrc:
     ~/.zshenv:
+    ~/.zprofile:
+      force: true  # overwrite the regular file created by the Homebrew installer
     ~/.gitconfig:
     ~/.gitignore:
+    ~/.secrets:
+      path: secrets
+      # The 'secrets' file is gitignored. Copy secrets.example → secrets and fill in your values.
+      # This link is skipped if the file doesn't exist.
     ~/.config/bat:
       create: true
       path: config/bat
@@ -27,5 +33,11 @@
       stdout: true
       stderr: true
     - command: ./setup_node.zsh
+      stdout: true
+      stderr: true
+    - command: ./setup_macos.zsh
+      stdout: true
+      stderr: true
+    - command: ./setup_ssh.zsh
       stdout: true
       stderr: true
