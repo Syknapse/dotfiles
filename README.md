@@ -99,7 +99,7 @@ brewbd   # alias for: brew bundle dump --force --describe --no-vscode
 These check that the repo still installs cleanly. The first three don't touch the machine, so they're safe to run anytime:
 
 ```bash
-./test.sh                    # syntax, shellcheck, YAML. Instant, no changes
+./lint.sh                    # syntax, shellcheck, YAML. Instant, no changes
 ./test/sandbox-install.sh    # run the real ./install into a temp $HOME, twice
 ./test/brewfile-drift.sh     # check every Brewfile package still resolves upstream
 ./verify.sh                  # check this machine against the expected setup
@@ -119,7 +119,7 @@ DOTFILES_DRY_RUN=1 ./install   # the whole install
 
 ### What runs automatically
 
-- A **pre-push hook** runs `test.sh` and `sandbox-install.sh` before every `git push`, and blocks the push if either fails. `./install` arms it automatically (by pointing `core.hooksPath` at `.githooks`). Skip it for a single push with `git push --no-verify`.
+- A **pre-push hook** runs `lint.sh` and `test/sandbox-install.sh` before every `git push`, and blocks the push if either fails. `./install` arms it automatically (by pointing `core.hooksPath` at `.githooks`). Skip it for a single push with `git push --no-verify`.
 - **GitHub Actions** runs the same two checks on every push. Nothing to set up.
 - **Brew drift** `./install` runs `brewfile-drift.sh` automatically the _first_ time it installs Homebrew on a new machine (advisory — it never blocks the install), and never on re-runs. We can also manually trigger the drift check on demand from the repo's Actions tab before provisioning.
 

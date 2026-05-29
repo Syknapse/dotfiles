@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Pre-push gate — refuses to push if the repo wouldn't install cleanly.
-# Runs the fast lint (test.sh) and the sandboxed fresh-install simulation
+# Runs the fast lint (lint.sh) and the sandboxed fresh-install simulation
 # (test/sandbox-install.sh). The slow, network-bound Brewfile drift check is
 # left to scheduled CI.
 #
@@ -23,7 +23,7 @@ run_step() {
   fi
 }
 
-run_step "lint (test.sh)" ./test.sh
+run_step "lint (lint.sh)" ./lint.sh
 run_step "fresh-install simulation (test/sandbox-install.sh)" ./test/sandbox-install.sh
 
 echo "✅ pre-push checks passed"

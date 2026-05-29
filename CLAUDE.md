@@ -24,7 +24,7 @@ cd ~/.dotfiles
 ## Testing & Verification
 
 ```bash
-./test.sh                    # lint: zsh -n + shellcheck + YAML validation (zero risk)
+./lint.sh                    # lint: zsh -n + shellcheck + YAML validation (zero risk)
 ./test/sandbox-install.sh    # fresh-install simulation into a temp $HOME, run twice (idempotency)
 ./test/brewfile-drift.sh     # verify every Brewfile token still resolves upstream (network)
 ./verify.sh                  # smoke-test THIS machine's real state (symlinks, packages, macOS)
@@ -34,8 +34,8 @@ cd ~/.dotfiles
 into a throwaway `$HOME` with a wiped env and all privileged steps dry-run'd, twice, asserting
 the fresh-install result + idempotency. None of the first three touch the real machine.
 
-Always run `./test.sh` before committing. `./install` arms the pre-push hook (`.githooks/pre-push`,
-via `core.hooksPath`), which runs test.sh + the sandbox sim before every push; GitHub Actions runs
+Always run `./lint.sh` before committing. `./install` arms the pre-push hook (`.githooks/pre-push`,
+via `core.hooksPath`), which runs lint.sh + the sandbox sim before every push; GitHub Actions runs
 the same per push (`.github/workflows/ci.yml`). The Brewfile drift check is not scheduled: it runs
 automatically the first time `./install` installs Homebrew on a new machine (advisory, non-blocking),
 and is available on demand via `.github/workflows/brewfile-drift.yml` (`workflow_dispatch`).
@@ -65,10 +65,10 @@ DOTFILES_DRY_RUN=1 ./install   # preview the whole install
 | `secrets.example` | Template for `~/.secrets` — copy to `secrets`, fill in, never commit |
 | `config/bat/config` | bat syntax mappings (zshrc/zshenv/zprofile → bash; Brewfile stays Ruby) |
 | `config/work-gitconfig.example` | Template for `~/work/.gitconfig` (work git identity) |
-| `test.sh` / `verify.sh` | Lint (no changes) / smoke-test this machine's real state |
+| `lint.sh` / `verify.sh` | Lint (no changes) / smoke-test this machine's real state |
 | `test/sandbox-install.sh` | Fresh-install simulation in a temp `$HOME`, run twice — main confidence check |
 | `test/brewfile-drift.sh` | Flags Brewfile tokens renamed/removed upstream |
-| `.githooks/pre-push` | Pre-push gate: test.sh + sandbox sim (enable via `core.hooksPath`) |
+| `.githooks/pre-push` | Pre-push gate: lint.sh + sandbox sim (enable via `core.hooksPath`) |
 | `.github/workflows/` | CI: lint + sandbox per push; Brewfile drift on demand (`workflow_dispatch`) |
 
 ## Secrets / API Keys

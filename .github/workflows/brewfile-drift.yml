@@ -13,6 +13,6 @@ jobs:
   drift:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check every Brewfile token still resolves upstream
         run: ./test/brewfile-drift.sh
