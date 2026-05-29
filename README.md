@@ -1,10 +1,10 @@
 # .dotfiles
 
-macOS dotfiles repo — managed with [Dotbot](https://github.com/anishathalye/dotbot).
+My macOS dotfiles, managed with [Dotbot](https://github.com/anishathalye/dotbot).
 
 ---
 
-## Quick Start
+## Quick start
 
 ```bash
 git clone <repo_address> ~/.dotfiles
@@ -12,119 +12,124 @@ cd ~/.dotfiles
 ./install
 ```
 
-> **Note:** On a brand new Mac, the Homebrew installer may prompt you to install Xcode Command Line Tools — that's expected and required. The install script handles everything else automatically.
+> **New Mac:** Homebrew may prompt you to install the Xcode Command Line Tools on the first run. That's expected and required; everything else runs on its own.
 >
-> **Apple Silicon only:** This repo assumes an Apple Silicon Mac — Homebrew paths are hardcoded to `/opt/homebrew` (in `zprofile`, `zshrc`, and the `setup_*.zsh` scripts). On an Intel Mac, Homebrew installs to `/usr/local`, so those paths would need adjusting.
+> **Apple Silicon only:** Homebrew paths are hardcoded to `/opt/homebrew` (in `zprofile`, `zshrc`, and the setup scripts). On an Intel Mac you'd need to point those at `/usr/local`.
 
-`./install` will:
-1. Create symlinks in `~` for all config files
-2. Create `~/projects` and `~/work` directories
-3. Install all Homebrew packages + casks from the Brewfile
-4. Set Homebrew ZSH as the default shell
-5. Install Node LTS via NVM
-6. Apply macOS system preferences
-7. Generate an SSH key (if none exists)
+`./install` does the following:
+
+1. Symlinks the config files into `~` (creating `secrets` from the template first, if it's missing)
+2. Creates `~/projects` and `~/work`
+3. Installs everything in the Brewfile (packages and casks)
+4. Sets the Homebrew zsh as the default shell
+5. Installs the latest Node LTS via nvm
+6. Applies macOS system preferences
+7. Generates an SSH key if there isn't one
+8. Arms the git pre-push hook (see [Testing](#testing))
+
+Re-running it later is safe.
 
 ---
 
-## After Cloning on a New Machine
+## Setting up a new machine
 
-1. Run `./install` — it auto-creates `secrets` from the template (chmod 600, gitignored) and symlinks it to `~/.secrets`
-2. Add your API keys to `~/.dotfiles/secrets` (already symlinked — no re-install needed)
-3. Create your work git identity: `cp config/work-gitconfig.example ~/work/.gitconfig` — then fill in your work name/email
+1. Run `./install`.
+2. Add API keys to `~/.dotfiles/secrets`. Install already creates this file (from the template, mode 600) and links it to `~/.secrets`, so it's ready to edit.
+3. If you want a separate work git identity, create it from the template: `cp config/work-gitconfig.example ~/work/.gitconfig`, then fill it in.
 
-> **Tip:** If you want your keys present from the very first shell, run `cp secrets.example secrets` and fill it in *before* `./install`. Existing secrets are never overwritten.
+To have your keys in place from the very first shell, fill in `secrets` _before_ running install (`cp secrets.example secrets`). Install never overwrites an existing `secrets` file.
 
 ---
 
 ## Symlinks
 
-Files are symlinked from `~/.dotfiles/` into your home directory via `install.conf.yaml`.  
-To add a new dotfile: add an entry under `link:` in `install.conf.yaml`:
+Config files live in `~/.dotfiles/` and are symlinked into `~` by `install.conf.yaml`.
+
+To add another one, add it under `link:`:
+
 ```yaml
 ~/.filename: filename
 ```
-Re-run `./install` to apply.
+
+Then re-run `./install`.
 
 ---
 
-## Secrets & API Keys
+## Secrets and API keys
 
-Private environment variables (API keys, tokens) belong in `~/.secrets` — **never in any tracked file**.
+Anything private (API keys, tokens) goes in `~/.secrets`, never in a tracked file.
 
-`./install` auto-creates `secrets` from `secrets.example` (with `600` permissions) if it doesn't exist, then symlinks it to `~/.secrets`. Just add your values:
+If `secrets` doesn't exist, `./install` creates it from `secrets.example` (mode 600) and links it to `~/.secrets`. Add your values there:
 
 ```bash
-$EDITOR ~/.dotfiles/secrets   # created by ./install; edit to add your keys
+$EDITOR ~/.dotfiles/secrets
 ```
 
-`zshrc` automatically sources `~/.secrets` on shell start. The `secrets` file is gitignored and is never overwritten when you re-run `./install`.
+`zshrc` sources `~/.secrets` on startup. The file is gitignored and is never overwritten by re-running install.
 
 ---
 
 ## Brewfile
 
-The Brewfile tracks Homebrew packages and apps (but **not** VSCode extensions — those sync automatically via VSCode Settings Sync).
+The Brewfile holds all the Homebrew packages and apps. VSCode extensions are left out on purpose, since they sync on their own through VSCode Settings Sync.
 
-To regenerate it from your current machine state:
+Regenerate it from the current machine with:
 
 ```bash
-brewbd   # brew bundle dump --force --describe --no-vscode
+brewbd   # alias for: brew bundle dump --force --describe --no-vscode
 ```
 
-The `HOMEBREW_BUNDLE_DUMP_NO_VSCODE=1` env var (set in `zshrc`) ensures VSCode extensions are excluded even if `brew bundle dump` is run directly without the alias.
-
-Then commit and push the updated Brewfile.
+`HOMEBREW_BUNDLE_DUMP_NO_VSCODE=1` (set in `zshrc`) keeps extensions out even when running `brew bundle dump` directly. Commit the result.
 
 ---
 
-## macOS Settings
+## macOS settings
 
-`setup_macos.zsh` applies your system preferences (Dock, Finder, keyboard, trackpad, screenshots, etc.).
+`setup_macos.zsh` applies system preferences (Dock, Finder, keyboard, trackpad, screenshots, and so on).
 
 ```bash
-./setup_macos.zsh --dry-run   # preview what would change
-./setup_macos.zsh             # apply all settings
+./setup_macos.zsh --dry-run   # show what would change
+./setup_macos.zsh             # apply it
 ```
 
 ---
 
-## Testing & Verification
+## Testing
 
-Four layers, fastest first — the first three make **no changes to your Mac**:
+These check that the repo still installs cleanly. The first three don't touch the machine, so they're safe to run anytime:
 
 ```bash
-./test.sh                    # lint: zsh -n + shellcheck + YAML validation (instant)
-./test/sandbox-install.sh    # simulate a fresh install into a throwaway $HOME, twice
-./test/brewfile-drift.sh     # check every Brewfile package still resolves upstream (network)
-./verify.sh                  # check THIS machine's real state against the expected setup
+./test.sh                    # syntax, shellcheck, YAML. Instant, no changes
+./test/sandbox-install.sh    # run the real ./install into a temp $HOME, twice
+./test/brewfile-drift.sh     # check every Brewfile package still resolves upstream
+./verify.sh                  # check this machine against the expected setup
 ```
 
 - **`test/sandbox-install.sh`** is the closest thing to a fresh-machine test without a fresh machine: it runs the real `./install` into a temp `$HOME` with a wiped environment and every privileged step neutralised (dry-run), **twice**, asserting both the fresh-install result and idempotency.
-- **`test/brewfile-drift.sh`** catches the "a cask got renamed/removed upstream" class of failure (e.g. `docker` → `docker-desktop`) *before* install day.
+- **`test/brewfile-drift.sh`** catches any packages renamed or dropped by brew.
 
-### Preview the whole install
+### Preview the whole install without changing anything
 
 Every setup script honours a dry-run mode that makes no changes:
 
 ```bash
-DOTFILES_DRY_RUN=1 ./install      # preview the entire install
-./setup_macos.zsh --dry-run       # …or a single script
+DOTFILES_DRY_RUN=1 ./install   # the whole install
+./setup_macos.zsh --dry-run    # or a single script
 ```
 
-### Automated gates
+### What runs automatically
 
-```bash
-git config core.hooksPath .githooks   # enable the pre-push hook (test.sh + sandbox sim)
-```
+- A **pre-push hook** runs `test.sh` and `sandbox-install.sh` before every `git push`, and blocks the push if either fails. `./install` arms it automatically (by pointing `core.hooksPath` at `.githooks`). Skip it for a single push with `git push --no-verify`.
+- **GitHub Actions** runs the same two checks on every push, and `brewfile-drift.sh` once a week. Nothing to set up.
 
-GitHub Actions runs the lint + sandbox simulation on every push, and the Brewfile drift check weekly. Bypass the hook in a pinch with `git push --no-verify`.
+So once you've run `./install`, every push is checked locally by the hook and on the server by CI. Running a script by hand is just for quicker feedback while editing.
 
 ---
 
-## Keeping Everything Synced
+## Keeping everything in sync
 
-After editing any dotfile: commit and push. On other machines:
+After changing a dotfile, commit and push. On the other machine:
+
 ```bash
 git pull
 ./install
@@ -132,15 +137,15 @@ git pull
 
 ---
 
-## Work Git Identity
+## Work git identity
 
-`~/.gitconfig` conditionally loads `~/work/.gitconfig` for any repo inside `~/work/`. That file must be created manually (it's outside this repo since it may contain a different work identity):
+`~/.gitconfig` pulls in `~/work/.gitconfig` for any repo under `~/work/`, so work repos can use a different name and email. That file isn't in this repo (it's a separate identity); create it from the template:
 
 ```bash
 cp config/work-gitconfig.example ~/work/.gitconfig
-# then edit ~/work/.gitconfig with your work name and email
+# then fill in your work name and email
 ```
 
 ---
 
-*Based on [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz)*
+_Based on [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz)_

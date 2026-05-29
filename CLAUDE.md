@@ -16,9 +16,10 @@ cd ~/.dotfiles
 
 `./install` drives Dotbot using `install.conf.yaml`, which runs in this order:
 
-1. Auto-creates `secrets` from `secrets.example` (chmod 600) if it doesn't exist, then creates symlinks in `~` for `zshrc`, `zshenv`, `zprofile`, `gitconfig`, `gitignore`, `secrets`, and `~/.config/bat`
-2. Creates `~/projects` and `~/work` directories
-3. Runs `setup_homebrew.zsh` → `setup_zsh.zsh` → `setup_node.zsh` → `setup_macos.zsh` → `setup_ssh.zsh`
+1. Creates `secrets` from `secrets.example` (chmod 600) if missing, then arms the git pre-push hook (`core.hooksPath` → `.githooks`; skipped in dry-run / when there's no `.git`)
+2. Symlinks `zshrc`, `zshenv`, `zprofile`, `gitconfig`, `gitignore`, `secrets`, and `~/.config/bat` into `~`
+3. Creates `~/projects` and `~/work` directories
+4. Runs `setup_homebrew.zsh` → `setup_zsh.zsh` → `setup_node.zsh` → `setup_macos.zsh` → `setup_ssh.zsh`
 
 ## Testing & Verification
 
@@ -33,9 +34,9 @@ cd ~/.dotfiles
 into a throwaway `$HOME` with a wiped env and all privileged steps dry-run'd, twice, asserting
 the fresh-install result + idempotency. None of the first three touch the real machine.
 
-Always run `./test.sh` before committing. A pre-push hook (`.githooks/pre-push`, enabled with
-`git config core.hooksPath .githooks`) runs test.sh + the sandbox sim automatically; GitHub
-Actions runs the same per push (`.github/workflows/ci.yml`) plus a weekly drift check.
+Always run `./test.sh` before committing. `./install` arms the pre-push hook (`.githooks/pre-push`,
+via `core.hooksPath`), which runs test.sh + the sandbox sim before every push; GitHub Actions runs
+the same per push (`.github/workflows/ci.yml`) plus a weekly drift check.
 
 Every setup script supports a dry-run that makes no changes:
 

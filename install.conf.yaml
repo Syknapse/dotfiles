@@ -15,6 +15,14 @@
       stdout: true
       stderr: true
 
+# Arm this repo's git hooks — the pre-push hook runs the test suite. core.hooksPath
+# lives in the clone's local .git/config (git never auto-arms hooks on clone, by
+# design), so install opts in for you. Skipped in dry-run and when there's no .git.
+- shell:
+    - command: 'if [ "$DOTFILES_DRY_RUN" != "1" ] && git rev-parse --git-dir >/dev/null 2>&1; then git config --local core.hooksPath .githooks; fi'
+      stdout: true
+      stderr: true
+
 - link:
     #   This is equivalent to ~/.zshrc: zshrc
     #   It will create the dot file in the home directory from the non dot version saved in our repo
