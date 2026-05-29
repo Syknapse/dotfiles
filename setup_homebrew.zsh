@@ -1,10 +1,18 @@
 #!/usr/bin/env zsh
 set -e
 
+# Dry-run mode: set DOTFILES_DRY_RUN=1 or pass --dry-run to preview without changes.
+DRY_RUN=false
+if [[ "${1:-}" == "--dry-run" || "$DOTFILES_DRY_RUN" == "1" ]]; then
+  DRY_RUN=true
+fi
+
 echo "\n<<< Starting Homebrew setup >>>\n"
 
 if exists brew; then
   echo "Brew already exists, skipping install"
+elif $DRY_RUN; then
+  echo "  [dry-run] Homebrew not found — would install it via the official install.sh"
 else
   echo "Brew doesn't exist, installing ..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -22,4 +30,8 @@ fi
 # https://github.com/Homebrew/homebrew-bundle/issues/474
 export HOMEBREW_CASK_OPTS="--no-quarantine"
 
-brew bundle --verbose
+if $DRY_RUN; then
+  echo "  [dry-run] would run: brew bundle --verbose  (HOMEBREW_CASK_OPTS=$HOMEBREW_CASK_OPTS)"
+else
+  brew bundle --verbose
+fi

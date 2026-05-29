@@ -91,12 +91,34 @@ Then commit and push the updated Brewfile.
 
 ## Testing & Verification
 
+Four layers, fastest first — the first three make **no changes to your Mac**:
+
 ```bash
-./test.sh     # syntax-check all scripts (zero risk)
-./verify.sh   # check current machine state against expected setup
+./test.sh                    # lint: zsh -n + shellcheck + YAML validation (instant)
+./test/sandbox-install.sh    # simulate a fresh install into a throwaway $HOME, twice
+./test/brewfile-drift.sh     # check every Brewfile package still resolves upstream (network)
+./verify.sh                  # check THIS machine's real state against the expected setup
 ```
 
-`verify.sh` is safe to run at any time — it makes no changes, just reports what's correct or missing.
+- **`test/sandbox-install.sh`** is the closest thing to a fresh-machine test without a fresh machine: it runs the real `./install` into a temp `$HOME` with a wiped environment and every privileged step neutralised (dry-run), **twice**, asserting both the fresh-install result and idempotency.
+- **`test/brewfile-drift.sh`** catches the "a cask got renamed/removed upstream" class of failure (e.g. `docker` → `docker-desktop`) *before* install day.
+
+### Preview the whole install
+
+Every setup script honours a dry-run mode that makes no changes:
+
+```bash
+DOTFILES_DRY_RUN=1 ./install      # preview the entire install
+./setup_macos.zsh --dry-run       # …or a single script
+```
+
+### Automated gates
+
+```bash
+git config core.hooksPath .githooks   # enable the pre-push hook (test.sh + sandbox sim)
+```
+
+GitHub Actions runs the lint + sandbox simulation on every push, and the Brewfile drift check weekly. Bypass the hook in a pinch with `git push --no-verify`.
 
 ---
 

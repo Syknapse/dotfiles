@@ -1,0 +1,28 @@
+name: CI
+
+# Lint + a sandboxed fresh-install simulation on every push/PR. Runs on an
+# Apple-Silicon macOS runner so the hardcoded /opt/homebrew paths match.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # shellcheck: needed by test.sh. nvm: so the sandbox can verify the nvm
+      # loader resolves (a real install gets nvm from `brew bundle` first; the
+      # sandbox dry-runs bundle, so we provide nvm here to mirror that state).
+      - name: Install prerequisites
+        run: brew install shellcheck nvm
+
+      - name: Lint (syntax, shellcheck, YAML)
+        run: ./test.sh
+
+      - name: Fresh-install simulation + idempotency
+        run: ./test/sandbox-install.sh

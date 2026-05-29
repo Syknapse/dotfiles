@@ -1,0 +1,17 @@
+name: Brewfile drift
+
+# Upstream renames/removes packages on its own schedule, not yours. This catches
+# that (e.g. docker -> docker-desktop) BEFORE you reinstall on a new machine.
+# Runs weekly and on demand — not per-push (it's slow and hits the network).
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  drift:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check every Brewfile token still resolves upstream
+        run: ./test/brewfile-drift.sh

@@ -2,6 +2,7 @@
 # Syntax-check all shell scripts without executing them.
 # Safe to run at any time — makes no changes.
 set -e
+shopt -s nullglob   # unmatched globs expand to nothing instead of a literal
 
 PASS=0
 FAIL=0
@@ -25,7 +26,7 @@ if command -v shellcheck &>/dev/null; then
   # SC2028 (echo \n) is a known false positive for zsh.
   # SC1091 (can't follow sourced file) fires on the nvm loader, whose path only
   # exists at runtime after Homebrew installs nvm — nothing to follow statically.
-  for f in *.zsh *.sh; do
+  for f in *.zsh *.sh test/*.sh .githooks/*; do
     if shellcheck --shell=bash --exclude=SC2028,SC1091 "$f" 2>&1; then
       echo "  ✅  $f"
     else
@@ -52,8 +53,18 @@ elif command -v yq &>/dev/null; then
     echo "  ❌  install.conf.yaml"
     ((FAIL++))
   fi
+elif command -v ruby &>/dev/null; then
+  # ruby ships with macOS, so the validator is always available here and in CI.
+  if ruby -ryaml -e "YAML.load_file('install.conf.yaml')" 2>&1; then
+    echo "  ✅  install.conf.yaml"
+  else
+    echo "  ❌  install.conf.yaml"
+    ((FAIL++))
+  fi
 else
-  echo "  ⚠️   Skipping — install pyyaml (pip3 install pyyaml) or yq for YAML validation"
+  # No validator at all — fail loudly rather than silently skipping.
+  echo "  ❌  No YAML validator found (need python-yaml, yq, or ruby)"
+  ((FAIL++))
 fi
 
 echo ""

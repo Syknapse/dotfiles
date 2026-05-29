@@ -10,7 +10,7 @@
 set -e
 
 DRY_RUN=false
-if [[ "$1" == "--dry-run" ]]; then
+if [[ "${1:-}" == "--dry-run" || "$DOTFILES_DRY_RUN" == "1" ]]; then
   DRY_RUN=true
   echo "\n🔍 DRY RUN — no changes will be made\n"
 else

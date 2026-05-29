@@ -3,6 +3,12 @@
 # Idempotent — exits early if ~/.ssh/id_ed25519 is already present.
 set -e
 
+# Dry-run mode: set DOTFILES_DRY_RUN=1 or pass --dry-run to preview without changes.
+DRY_RUN=false
+if [[ "${1:-}" == "--dry-run" || "$DOTFILES_DRY_RUN" == "1" ]]; then
+  DRY_RUN=true
+fi
+
 KEY="$HOME/.ssh/id_ed25519"
 SSH_CONFIG="$HOME/.ssh/config"
 
@@ -23,6 +29,17 @@ if [ -z "$GIT_EMAIL" ]; then
   KEY_COMMENT="$(hostname)"
 else
   KEY_COMMENT="$GIT_EMAIL"
+fi
+
+if $DRY_RUN; then
+  echo "  [dry-run] would generate an Ed25519 key at $KEY (comment: $KEY_COMMENT)"
+  echo "  [dry-run] would add it to the macOS keychain via ssh-agent + ssh-add"
+  if grep -qE '^[[:space:]]*Host[[:space:]]+\*[[:space:]]*$' "$SSH_CONFIG" 2>/dev/null; then
+    echo "  [dry-run] $SSH_CONFIG already has a 'Host *' block — would leave it untouched"
+  else
+    echo "  [dry-run] would add a 'Host *' block to $SSH_CONFIG"
+  fi
+  exit 0
 fi
 
 # Create ~/.ssh with correct permissions if it doesn't exist

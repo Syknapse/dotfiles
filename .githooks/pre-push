@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Pre-push gate — refuses to push if the repo wouldn't install cleanly.
+# Runs the fast lint (test.sh) and the sandboxed fresh-install simulation
+# (test/sandbox-install.sh). The slow, network-bound Brewfile drift check is
+# left to scheduled CI.
+#
+# Enable once:        git config core.hooksPath .githooks
+# Bypass in a pinch:  git push --no-verify
+set -e
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+echo "▶ pre-push: ./test.sh (lint + YAML)"
+./test.sh >/dev/null
+
+echo "▶ pre-push: ./test/sandbox-install.sh (fresh-install + idempotency)"
+./test/sandbox-install.sh >/dev/null
+
+echo "✅ pre-push checks passed"
