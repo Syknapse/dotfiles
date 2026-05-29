@@ -37,8 +37,18 @@ ssh-keygen -t ed25519 -C "$KEY_COMMENT" -f "$KEY"
 eval "$(ssh-agent -s)"
 ssh-add --apple-use-keychain "$KEY"
 
-# Write ~/.ssh/config entry if not already present
-if ! grep -q "UseKeychain yes" "$SSH_CONFIG" 2>/dev/null; then
+# Write a catch-all (`Host *`) entry — but only if one doesn't already exist,
+# so we never append a second, conflicting `Host *` block to a config the user
+# (or another tool) has already set up.
+if grep -qE '^[[:space:]]*Host[[:space:]]+\*[[:space:]]*$' "$SSH_CONFIG" 2>/dev/null; then
+  echo "  ⚠️   ~/.ssh/config already has a 'Host *' block — leaving it untouched."
+  echo "      Make sure it includes these lines:"
+  echo "        AddKeysToAgent yes"
+  echo "        UseKeychain yes"
+  echo "        IdentityFile $KEY"
+else
+  touch "$SSH_CONFIG"
+  chmod 600 "$SSH_CONFIG"
   cat >> "$SSH_CONFIG" <<EOF
 
 Host *
@@ -46,10 +56,7 @@ Host *
   UseKeychain yes
   IdentityFile $KEY
 EOF
-  chmod 600 "$SSH_CONFIG"
   echo "  ✅  Added SSH config entry (~/.ssh/config)"
-else
-  echo "  ✅  SSH config already has UseKeychain entry"
 fi
 
 echo "\n✅  SSH key generated at $KEY"

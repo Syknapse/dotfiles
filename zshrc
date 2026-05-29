@@ -5,7 +5,7 @@ echo -e "│ lsf -> ls -lAFh │ eza -> eza -lahF --git │ man -> batman │ pn
 echo -e "├─────────────────┴────────────────────────┴─────┬─────────┴────────────┴────────────────────────┤"
 echo -e "│ restart -> source ~/.zshrc && source ~/.zshenv │ brewbd -> brew bundle dump (no vscode exts)   │"
 echo -e "├──────────────────────────────┬─────────────────┴───────────────────────────────────────────────┤"
-echo -e "│ trail -> print PATH variable │ mkcd -> make a new directory and cd into it mkdc 'new_project'  │"
+echo -e "│ trail -> print PATH variable │ mkcd -> make a new directory and cd into it mkcd 'new_project'  │"
 echo -e "└──────────────────────────────┴─────────────────────────────────────────────────────────────────┘"
 
 # Variables
@@ -38,7 +38,7 @@ alias lsf='ls -lAFh'
 alias eza='eza -lahF --git'
 # A better version of the manual comand
 alias man=batman
-# Restsrt the shell implementing changes to zsh config files
+# Restart the shell implementing changes to zsh config files
 alias restart='source ~/.zshrc && source ~/.zshenv '
 # Brew bundle dump (--no-vscode: extensions are synced via VSCode Settings Sync)
 alias brewbd='brew bundle dump --force --describe --no-vscode'
@@ -83,7 +83,7 @@ path=(
 # -------------------------
 
 # Create a new directory and cd to it
-# USAGE: mkdc 'new_project'
+# USAGE: mkcd 'new_project'
 function mkcd() {
   mkdir -p "$@" && cd "$_" 
 }

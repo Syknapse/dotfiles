@@ -38,8 +38,8 @@ brew "zsh"
 cask "bitwarden"
 # Open-source API client — stores collections as plain files (Git-friendly)
 cask "bruno"
-# App for running containerised applications
-cask "docker"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
 # Web browser
 cask "firefox"
 # Git client focusing on productivity

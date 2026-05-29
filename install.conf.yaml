@@ -4,6 +4,17 @@
 
 - clean: ["~"]
 
+# Create the secrets file from the template before linking it, so a fresh clone
+# never fails on a missing source. An existing secrets file is left untouched
+# (real keys are never overwritten) — we only enforce owner-only permissions.
+- shell:
+    - command: '[ -f secrets ] || cp secrets.example secrets'
+      stdout: true
+      stderr: true
+    - command: 'chmod 600 secrets'
+      stdout: true
+      stderr: true
+
 - link:
     #   This is equivalent to ~/.zshrc: zshrc
     #   It will create the dot file in the home directory from the non dot version saved in our repo
@@ -15,8 +26,10 @@
     ~/.gitignore:
     ~/.secrets:
       path: secrets
-      # The 'secrets' file is gitignored. Copy secrets.example → secrets and fill in your values.
-      # This link is skipped if the file doesn't exist.
+      # The 'secrets' file is gitignored and auto-created from secrets.example by
+      # the shell step above. ignore-missing is a safety net so a missing source
+      # never hard-fails the install.
+      ignore-missing: true
     ~/.config/bat:
       create: true
       path: config/bat
@@ -25,19 +38,26 @@
     - ~/projects
     - ~/work
 
+# stdin: true lets these scripts read from the terminal for interactive prompts
+# (sudo / chsh passwords, ssh-keygen passphrase). Without it the prompts fail.
 - shell:
     - command: ./setup_homebrew.zsh
+      stdin: true
       stdout: true
       stderr: true
     - command: ./setup_zsh.zsh
+      stdin: true
       stdout: true
       stderr: true
     - command: ./setup_node.zsh
+      stdin: true
       stdout: true
       stderr: true
     - command: ./setup_macos.zsh
+      stdin: true
       stdout: true
       stderr: true
     - command: ./setup_ssh.zsh
+      stdin: true
       stdout: true
       stderr: true

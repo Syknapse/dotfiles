@@ -15,7 +15,7 @@ else
 fi
 
 if [ "$SHELL" = '/opt/homebrew/bin/zsh' ]; then
-  echo 'Already using Hombrew ZSH as default user shell: $SHELL is /opt/homebrew/bin/zsh'
+  echo "Already using Homebrew ZSH as default user shell ($SHELL)"
 else
   echo "Enter user password to change login shell"
   chsh -s '/opt/homebrew/bin/zsh'

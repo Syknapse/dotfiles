@@ -15,7 +15,10 @@
 #--map-syntax "*.ino:C++"
 #--map-syntax ".ignore:Git Ignore"
 
-# Define language to use for our non-dot versions of our files (gives us syntax highlighting)
+# Map our non-dot config files to shell syntax for highlighting.
+# Recent bat versions detect bare zshrc/zshenv/zprofile as shell natively, so
+# these are belt-and-suspenders for older bat. The Brewfile is intentionally not
+# mapped — bat highlights it as Ruby, which is correct (the Brewfile is a Ruby DSL).
 --map-syntax "zshrc:Bourne Again Shell (bash)"
 --map-syntax "zshenv:Bourne Again Shell (bash)"
---map-syntax "brewfile:Bourne Again Shell (bash)"
+--map-syntax "zprofile:Bourne Again Shell (bash)"

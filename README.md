@@ -13,6 +13,8 @@ cd ~/.dotfiles
 ```
 
 > **Note:** On a brand new Mac, the Homebrew installer may prompt you to install Xcode Command Line Tools — that's expected and required. The install script handles everything else automatically.
+>
+> **Apple Silicon only:** This repo assumes an Apple Silicon Mac — Homebrew paths are hardcoded to `/opt/homebrew` (in `zprofile`, `zshrc`, and the `setup_*.zsh` scripts). On an Intel Mac, Homebrew installs to `/usr/local`, so those paths would need adjusting.
 
 `./install` will:
 1. Create symlinks in `~` for all config files
@@ -27,9 +29,11 @@ cd ~/.dotfiles
 
 ## After Cloning on a New Machine
 
-1. Copy your secrets file: `cp secrets.example secrets` — then fill in your API keys
-2. Create your work git identity: `cp config/work-gitconfig.example ~/work/.gitconfig` — then fill in your work name/email
-3. Run `./install`
+1. Run `./install` — it auto-creates `secrets` from the template (chmod 600, gitignored) and symlinks it to `~/.secrets`
+2. Add your API keys to `~/.dotfiles/secrets` (already symlinked — no re-install needed)
+3. Create your work git identity: `cp config/work-gitconfig.example ~/work/.gitconfig` — then fill in your work name/email
+
+> **Tip:** If you want your keys present from the very first shell, run `cp secrets.example secrets` and fill it in *before* `./install`. Existing secrets are never overwritten.
 
 ---
 
@@ -48,11 +52,13 @@ Re-run `./install` to apply.
 
 Private environment variables (API keys, tokens) belong in `~/.secrets` — **never in any tracked file**.
 
+`./install` auto-creates `secrets` from `secrets.example` (with `600` permissions) if it doesn't exist, then symlinks it to `~/.secrets`. Just add your values:
+
 ```bash
-cp secrets.example secrets   # then edit with your values
+$EDITOR ~/.dotfiles/secrets   # created by ./install; edit to add your keys
 ```
 
-`zshrc` automatically sources `~/.secrets` on shell start. The `secrets` file is gitignored.
+`zshrc` automatically sources `~/.secrets` on shell start. The `secrets` file is gitignored and is never overwritten when you re-run `./install`.
 
 ---
 

@@ -22,9 +22,11 @@ echo ""
 echo "=== shellcheck ==="
 if command -v shellcheck &>/dev/null; then
   # Note: shellcheck doesn't support zsh natively; --shell=bash is close enough.
-  # SC2028 (echo \n) is a known false positive for zsh — ignored.
+  # SC2028 (echo \n) is a known false positive for zsh.
+  # SC1091 (can't follow sourced file) fires on the nvm loader, whose path only
+  # exists at runtime after Homebrew installs nvm — nothing to follow statically.
   for f in *.zsh *.sh; do
-    if shellcheck --shell=bash --exclude=SC2028 "$f" 2>&1; then
+    if shellcheck --shell=bash --exclude=SC2028,SC1091 "$f" 2>&1; then
       echo "  ✅  $f"
     else
       echo "  ⚠️   $f (see above)"

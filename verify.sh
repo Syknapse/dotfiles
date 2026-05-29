@@ -63,11 +63,13 @@ header "Homebrew"
 
 if command -v brew &>/dev/null; then
   ok "brew installed ($(brew --version | head -1))"
-  if brew bundle check --file="$DOTS/Brewfile" &>/dev/null; then
+  # HOMEBREW_NO_AUTO_UPDATE keeps this read-only check from triggering a tap
+  # update (slow, and a side effect — verify.sh must make no changes).
+  if HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --file="$DOTS/Brewfile" &>/dev/null; then
     ok "All Brewfile packages installed"
   else
     # Collect specific missing packages
-    missing=$(brew bundle check --file="$DOTS/Brewfile" --verbose 2>&1 | grep "^→" | sed 's/^→ //')
+    missing=$(HOMEBREW_NO_AUTO_UPDATE=1 brew bundle check --file="$DOTS/Brewfile" --verbose 2>&1 | grep "^→" | sed 's/^→ //')
     fail "Some Brewfile dependencies unmet — run: brew bundle"
     while IFS= read -r line; do
       warn "  $line"
