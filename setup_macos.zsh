@@ -36,6 +36,9 @@ set_default() {
   fi
 }
 
+# ~/Documents/Snips, ~/work and ~/projects are created by ./install (dotbot's
+# 'create' step, which runs before this script) — we just reference them here.
+
 # ─── Dock ────────────────────────────────────────────────────────────────────
 echo "=== Dock ==="
 
@@ -99,11 +102,6 @@ set_default com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool fals
 # ─── Screenshots ─────────────────────────────────────────────────────────────
 echo "\n=== Screenshots ==="
 
-if ! $DRY_RUN; then
-  mkdir -p "$HOME/Documents/Snips"
-  echo "  ✅  Created ~/Documents/Snips (if it didn't exist)"
-fi
-
 set_default com.apple.screencapture location      -string "$HOME/Documents/Snips" "Screenshot save location: ~/Documents/Snips"
 set_default com.apple.screencapture showsClicks   -bool   true                    "Screenshots: show mouse clicks"
 set_default com.apple.screencapture disable-shadow -bool  true                    "Screenshots: disable window shadow"
@@ -147,8 +145,8 @@ set_default "com.apple.print.PrintingPrefs" "Quit When Finished" -bool true "Pri
 # ─── Restart affected services ───────────────────────────────────────────────
 if ! $DRY_RUN; then
   echo "\n=== Restarting services ==="
-  killall Finder && echo "  ✅  Restarted Finder"
-  killall Dock   && echo "  ✅  Restarted Dock"
+  if killall Finder 2>/dev/null; then echo "  ✅  Restarted Finder"; fi
+  if killall Dock   2>/dev/null; then echo "  ✅  Restarted Dock";   fi
   echo "\n✅  macOS setup complete."
   echo "⚠️   Some settings (keyboard repeat, trackpad) may require logging out to fully apply."
 else

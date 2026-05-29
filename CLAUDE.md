@@ -18,7 +18,7 @@ cd ~/.dotfiles
 
 1. Creates `secrets` from `secrets.example` (chmod 600) if missing, then arms the git pre-push hook (`core.hooksPath` → `.githooks`; skipped in dry-run / when there's no `.git`)
 2. Symlinks `zshrc`, `zshenv`, `zprofile`, `gitconfig`, `gitignore`, `secrets`, and `~/.config/bat` into `~`
-3. Creates `~/projects` and `~/work` directories
+3. Creates `~/projects`, `~/work`, and `~/Documents/Snips` (screenshot folder) directories
 4. Runs `setup_homebrew.zsh` → `setup_zsh.zsh` → `setup_node.zsh` → `setup_macos.zsh` → `setup_ssh.zsh`
 
 ## Testing & Verification
@@ -36,7 +36,9 @@ the fresh-install result + idempotency. None of the first three touch the real m
 
 Always run `./test.sh` before committing. `./install` arms the pre-push hook (`.githooks/pre-push`,
 via `core.hooksPath`), which runs test.sh + the sandbox sim before every push; GitHub Actions runs
-the same per push (`.github/workflows/ci.yml`) plus a weekly drift check.
+the same per push (`.github/workflows/ci.yml`). The Brewfile drift check is not scheduled: it runs
+automatically the first time `./install` installs Homebrew on a new machine (advisory, non-blocking),
+and is available on demand via `.github/workflows/brewfile-drift.yml` (`workflow_dispatch`).
 
 Every setup script supports a dry-run that makes no changes:
 
@@ -55,7 +57,7 @@ DOTFILES_DRY_RUN=1 ./install   # preview the whole install
 | `zprofile` | Homebrew shellenv eval — loaded before zshrc |
 | `gitconfig` | Git aliases, default branch, conditional include for `~/work/` |
 | `Brewfile` | All Homebrew formulae, casks, VS Code extensions, npm globals |
-| `setup_homebrew.zsh` | Installs Brew if missing, evals shellenv, runs `brew bundle` |
+| `setup_homebrew.zsh` | Installs Brew if missing, evals shellenv, runs a drift pre-check on first install, runs `brew bundle` |
 | `setup_zsh.zsh` | Sets Homebrew ZSH as the default shell |
 | `setup_node.zsh` | Installs Node LTS via NVM, installs `trash-cli` globally |
 | `setup_macos.zsh` | Applies macOS system preferences (Dock, Finder, keyboard, etc.) |
@@ -67,7 +69,7 @@ DOTFILES_DRY_RUN=1 ./install   # preview the whole install
 | `test/sandbox-install.sh` | Fresh-install simulation in a temp `$HOME`, run twice — main confidence check |
 | `test/brewfile-drift.sh` | Flags Brewfile tokens renamed/removed upstream |
 | `.githooks/pre-push` | Pre-push gate: test.sh + sandbox sim (enable via `core.hooksPath`) |
-| `.github/workflows/` | CI: lint + sandbox per push; Brewfile drift weekly |
+| `.github/workflows/` | CI: lint + sandbox per push; Brewfile drift on demand (`workflow_dispatch`) |
 
 ## Secrets / API Keys
 

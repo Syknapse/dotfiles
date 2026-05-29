@@ -77,6 +77,7 @@ done
 
 if [ -d "$SANDBOX/projects" ]; then ok "created ~/projects"; else no "missing ~/projects"; fi
 if [ -d "$SANDBOX/work" ];     then ok "created ~/work";     else no "missing ~/work";     fi
+if [ -d "$SANDBOX/Documents/Snips" ]; then ok "created ~/Documents/Snips"; else no "missing ~/Documents/Snips"; fi
 
 # secrets file is created (from template) and locked down
 if [ -f "$REPO/secrets" ]; then

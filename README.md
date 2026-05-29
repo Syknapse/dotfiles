@@ -19,7 +19,7 @@ cd ~/.dotfiles
 `./install` does the following:
 
 1. Symlinks the config files into `~` (creating `secrets` from the template first, if it's missing)
-2. Creates `~/projects` and `~/work`
+2. Creates `~/projects`, `~/work`, and `~/Documents/Snips` (screenshot folder)
 3. Installs everything in the Brewfile (packages and casks)
 4. Sets the Homebrew zsh as the default shell
 5. Installs the latest Node LTS via nvm
@@ -106,7 +106,7 @@ These check that the repo still installs cleanly. The first three don't touch th
 ```
 
 - **`test/sandbox-install.sh`** is the closest thing to a fresh-machine test without a fresh machine: it runs the real `./install` into a temp `$HOME` with a wiped environment and every privileged step neutralised (dry-run), **twice**, asserting both the fresh-install result and idempotency.
-- **`test/brewfile-drift.sh`** catches any packages renamed or dropped by brew.
+- **`test/brewfile-drift.sh`** catches any packages renamed or dropped by brew. It runs automatically on a fresh-machine install; run it by hand anytime you want to check before provisioning.
 
 ### Preview the whole install without changing anything
 
@@ -120,7 +120,8 @@ DOTFILES_DRY_RUN=1 ./install   # the whole install
 ### What runs automatically
 
 - A **pre-push hook** runs `test.sh` and `sandbox-install.sh` before every `git push`, and blocks the push if either fails. `./install` arms it automatically (by pointing `core.hooksPath` at `.githooks`). Skip it for a single push with `git push --no-verify`.
-- **GitHub Actions** runs the same two checks on every push, and `brewfile-drift.sh` once a week. Nothing to set up.
+- **GitHub Actions** runs the same two checks on every push. Nothing to set up.
+- **Brew drift** `./install` runs `brewfile-drift.sh` automatically the _first_ time it installs Homebrew on a new machine (advisory — it never blocks the install), and never on re-runs. We can also manually trigger the drift check on demand from the repo's Actions tab before provisioning.
 
 So once you've run `./install`, every push is checked locally by the hook and on the server by CI. Running a script by hand is just for quicker feedback while editing.
 

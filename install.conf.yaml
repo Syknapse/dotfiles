@@ -45,6 +45,7 @@
 - create:
     - ~/projects
     - ~/work
+    - ~/Documents/Snips   # screenshot folder; setup_macos.zsh references it
 
 # stdin: true lets these scripts read from the terminal for interactive prompts
 # (sudo / chsh passwords, ssh-keygen passphrase). Without it the prompts fail.

@@ -1,11 +1,12 @@
 name: Brewfile drift
 
-# Upstream renames/removes packages on its own schedule, not yours. This catches
-# that (e.g. docker -> docker-desktop) BEFORE you reinstall on a new machine.
-# Runs weekly and on demand — not per-push (it's slow and hits the network).
+# Brew can rename/remove packages (e.g. docker -> docker-desktop).
+# Drift is checked automatically on a fresh-machine
+# install (setup_homebrew.zsh runs the drift script the one time Homebrew is
+# freshly installed).
+# This workflow stays for on-demand pre-provision checks from the Actions tab.
+
 on:
-  schedule:
-    - cron: "0 9 * * 1" # Mondays 09:00 UTC
   workflow_dispatch:
 
 jobs:

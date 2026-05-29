@@ -11,10 +11,19 @@ set -e
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-echo "▶ pre-push: ./test.sh (lint + YAML)"
-./test.sh >/dev/null
+# Run a check quietly, but replay its output if it fails so we know why it failed.
+run_step() {
+  local label="$1"; shift
+  echo "▶ pre-push: $label"
+  local out
+  if ! out="$("$@" 2>&1)"; then
+    printf '%s\n' "$out"
+    echo "❌ pre-push: $label failed — push aborted (bypass once with: git push --no-verify)"
+    exit 1
+  fi
+}
 
-echo "▶ pre-push: ./test/sandbox-install.sh (fresh-install + idempotency)"
-./test/sandbox-install.sh >/dev/null
+run_step "lint (test.sh)" ./test.sh
+run_step "fresh-install simulation (test/sandbox-install.sh)" ./test/sandbox-install.sh
 
 echo "✅ pre-push checks passed"
